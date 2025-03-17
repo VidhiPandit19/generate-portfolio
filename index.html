@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Portfolio Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> <!-- PDF Library -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+        }
+        h2 {
+            color: #2c3e50;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .portfolio-container {
+            margin-top: 20px;
+        }
+        .user-section {
+            border-bottom: 2px solid #ddd;
+            padding: 10px 0;
+        }
+        .question {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .answer {
+            font-size: 16px;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+        }
+        .download-btn {
+            background-color: #27ae60;
+        }
+        .download-btn:hover {
+            background-color: #219150;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Enter Your Details</h2>
+        <form id="portfolioForm">
+            <input type="text" id="name" placeholder="Your Name" required><br>
+            <textarea id="summary" placeholder="Summary" required></textarea><br>
+            <input type="text" id="skills" placeholder="Skills (comma separated)" required><br>
+            <input type="text" id="experience" placeholder="Experience" required><br>
+            <input type="text" id="education" placeholder="Education" required><br>
+            <button type="submit">Generate Portfolio</button>
+        </form>
+
+        <div class="portfolio-container" id="portfolio">
+            <!-- User Portfolios will appear here -->
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("portfolioForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent form from refreshing the page
+
+            // Get input values
+            const name = document.getElementById("name").value;
+            const summary = document.getElementById("summary").value;
+            const skills = document.getElementById("skills").value;
+            const experience = document.getElementById("experience").value;
+            const education = document.getElementById("education").value;
+
+            // Create user section
+            const portfolioContainer = document.getElementById("portfolio");
+            const userSection = document.createElement("div");
+            userSection.classList.add("user-section");
+
+            userSection.innerHTML = `
+                <h2>${name}'s Portfolio</h2>
+                <p class="question">Summary</p>
+                <p class="answer">${summary}</p>
+
+                <p class="question">Skills</p>
+                <p class="answer">${skills}</p>
+
+                <p class="question">Experience</p>
+                <p class="answer">${experience}</p>
+
+                <p class="question">Education</p>
+                <p class="answer">${education}</p>
+
+                <button class="download-btn" onclick="downloadPortfolio('${name}', '${summary}', '${skills}', '${experience}', '${education}')">
+                    Download Portfolio
+                </button>
+            `;
+
+            portfolioContainer.appendChild(userSection);
+
+            // Clear input fields after submission
+            document.getElementById("portfolioForm").reset();
+        });
+
+        function downloadPortfolio(name, summary, skills, experience, education) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(22);
+            doc.text(`${name}'s Portfolio`, 10, 20);
+
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(16);
+            doc.text("Summary", 10, 40);
+            doc.setFont("helvetica", "normal");
+            doc.text(summary, 10, 50);
+
+            doc.setFont("helvetica", "bold");
+            doc.text("Skills", 10, 70);
+            doc.setFont("helvetica", "normal");
+            doc.text(skills, 10, 80);
+
+            doc.setFont("helvetica", "bold");
+            doc.text("Experience", 10, 100);
+            doc.setFont("helvetica", "normal");
+            doc.text(experience, 10, 110);
+
+            doc.setFont("helvetica", "bold");
+            doc.text("Education", 10, 130);
+            doc.setFont("helvetica", "normal");
+            doc.text(education, 10, 140);
+
+            doc.save(`${name}_Portfolio.pdf`);
+        }
+    </script>
+
+</body>
+</html>
