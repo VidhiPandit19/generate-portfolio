@@ -140,8 +140,3 @@ Contributions are welcome!
 GitHub:
 https://github.com/VidhiPandit19
 
----
-
-## 📜 License
-
-This project is open-source and available under the **MIT License**.
